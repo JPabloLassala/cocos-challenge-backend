@@ -3,6 +3,7 @@ import { registerAs } from '@nestjs/config';
 export interface IAppConfig {
   port: number;
   environment: string;
+  useEnv: boolean;
 }
 
 export interface IDatabaseConfig {

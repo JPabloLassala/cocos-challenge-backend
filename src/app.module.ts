@@ -11,6 +11,7 @@ import { DatabaseModule } from '@Database';
       load: [appConfig, databaseConfig],
       isGlobal: true,
       validate: validate,
+      ignoreEnvFile: process.env.IGNORE_ENV_FILE === 'true',
     }),
     DatabaseModule.forRoot(),
   ],
