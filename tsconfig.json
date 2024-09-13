@@ -18,7 +18,8 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@Config": ["src/Config"]
+      "@Config": ["src/Config"],
+      "@Database": ["src/Database"]
     }
   }
 }
