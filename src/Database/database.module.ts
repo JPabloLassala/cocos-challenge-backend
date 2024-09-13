@@ -1,7 +1,7 @@
 import { IDatabaseConfig } from '@Config';
 import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({
   imports: [ConfigModule],
@@ -11,25 +11,24 @@ export class DatabaseModule {
     return {
       module: DatabaseModule,
       imports: [
-        TypeOrmModule.forRootAsync({
+        SequelizeModule.forRootAsync({
           name: 'default',
           useFactory: (configService: ConfigService) => {
             const dbConfig = configService.get<IDatabaseConfig>('database');
             return {
-              type: 'postgres',
+              dialect: 'postgres',
               host: dbConfig.host,
               port: dbConfig.port,
               username: dbConfig.username,
               password: dbConfig.password,
               database: dbConfig.name,
-              autoLoadEntities: true,
-              synchronize: true,
+              models: [],
             };
           },
           inject: [ConfigService],
         }),
       ],
-      exports: [TypeOrmModule],
+      exports: [SequelizeModule],
     };
   }
 }
