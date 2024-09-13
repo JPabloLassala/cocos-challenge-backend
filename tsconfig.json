@@ -19,7 +19,8 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@Config": ["src/Config"],
-      "@Database": ["src/Database"]
+      "@Database": ["src/Database"],
+      "@App": ["src/App"]
     }
   }
 }
