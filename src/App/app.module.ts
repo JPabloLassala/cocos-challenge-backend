@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { appConfig, databaseConfig, validate } from '@Config';
 import { DatabaseModule } from '@Database';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionsFilter } from '@Utils';
 
 @Module({
   imports: [
@@ -16,6 +18,12 @@ import { DatabaseModule } from '@Database';
     DatabaseModule.forRoot(),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
 })
 export class AppModule {}
