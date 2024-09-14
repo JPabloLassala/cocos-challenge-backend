@@ -20,7 +20,8 @@
     "paths": {
       "@Config": ["src/Config"],
       "@Database": ["src/Database"],
-      "@App": ["src/App"]
+      "@App": ["src/App"],
+      "@Utils": ["src/Utils"]
     }
   }
 }
