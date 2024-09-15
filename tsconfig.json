@@ -21,7 +21,10 @@
       "@Config": ["src/Config"],
       "@Database": ["src/Database"],
       "@App": ["src/App"],
-      "@Utils": ["src/Utils"]
+      "@Utils": ["src/Utils"],
+      "@User": ["src/User"],
+      "@Instrument": ["src/Instrument"],
+      "@Order": ["src/Order"]
     }
   }
 }
