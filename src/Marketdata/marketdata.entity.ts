@@ -1,6 +1,6 @@
-import { Instrument } from '@Instrument';
-import { User } from '@User';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Instrument } from "@Instrument";
+import { User } from "@User";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Marketdata {

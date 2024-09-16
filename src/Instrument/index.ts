@@ -1,1 +1,1 @@
-export * from './instrument.entity';
+export * from "./instrument.entity";

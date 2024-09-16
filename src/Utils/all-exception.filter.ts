@@ -1,7 +1,7 @@
-import { Environments, IAppConfig } from '@Config';
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { HttpAdapterHost } from '@nestjs/core';
+import { Environments, IAppConfig } from "@Config";
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { HttpAdapterHost } from "@nestjs/core";
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -14,13 +14,13 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
     const httpStatus = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
-    const { environment } = this.configService.get<IAppConfig>('app');
+    const { environment } = this.configService.get<IAppConfig>("app");
     const getStack = () => {
       if (environment !== Environments.Development) {
         return undefined;
       }
       if (exception instanceof Error) {
-        return exception.stack.split('\n');
+        return exception.stack.split("\n");
       }
       return exception;
     };
