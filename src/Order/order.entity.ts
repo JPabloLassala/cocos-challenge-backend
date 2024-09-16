@@ -1,6 +1,7 @@
-import { Instrument } from '@Instrument';
-import { User } from '@User';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Instrument } from "@Instrument";
+import { User } from "@User";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { OrderSides, OrderStatuses, OrderTypes } from "./order.constants";
 
 @Entity()
 export class Order {
@@ -20,13 +21,13 @@ export class Order {
   price: number;
 
   @Column()
-  type: string;
+  type: OrderTypes.Market | OrderTypes.Limit;
 
   @Column()
-  side: string;
+  side: OrderSides.Buy | OrderSides.Sell | OrderSides.CashIn | OrderSides.CashOut;
 
   @Column()
-  status: string;
+  status: OrderStatuses.New | OrderStatuses.Filled | OrderStatuses.Rejected | OrderStatuses.Cancelled;
 
   @Column()
   datetime: Date;

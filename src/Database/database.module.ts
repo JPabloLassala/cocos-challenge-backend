@@ -1,7 +1,8 @@
-import { IDatabaseConfig } from '@Config';
-import { DynamicModule, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { IDatabaseConfig } from "@Config";
+import { DynamicModule, Module } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { User } from "@User";
 
 @Module({
   imports: [ConfigModule],
@@ -12,17 +13,17 @@ export class DatabaseModule {
       module: DatabaseModule,
       imports: [
         TypeOrmModule.forRootAsync({
-          name: 'default',
+          name: "default",
           useFactory: (configService: ConfigService) => {
-            const dbConfig = configService.get<IDatabaseConfig>('database');
+            const dbConfig = configService.get<IDatabaseConfig>("database");
             return {
-              type: 'postgres',
+              type: "postgres",
               host: dbConfig.host,
               port: dbConfig.port,
               username: dbConfig.username,
               password: dbConfig.password,
               database: dbConfig.name,
-              entities: [],
+              entities: [User],
             };
           },
           inject: [ConfigService],
