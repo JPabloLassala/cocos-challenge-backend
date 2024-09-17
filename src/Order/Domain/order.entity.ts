@@ -1,18 +1,20 @@
-import { Instrument } from "@Instrument";
-import { User } from "@User";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { OrderSides, OrderStatuses, OrderTypes } from "./order.constants";
+import { User } from "@User/Domain/user.entity";
+import { Instrument } from "@Instrument/Domain/instrument.entity";
 
-@Entity()
+@Entity({ name: "orders" })
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column(() => Instrument)
-  instrumentId: number;
+  @ManyToOne(() => Instrument, (instrument) => instrument.orders)
+  @JoinColumn({ name: "instrumentid" })
+  instrument: Instrument;
 
-  @Column(() => User)
-  userId: number;
+  @ManyToOne(() => User, (user) => user.orders)
+  @JoinColumn({ name: "userid" })
+  user: User;
 
   @Column()
   size: number;

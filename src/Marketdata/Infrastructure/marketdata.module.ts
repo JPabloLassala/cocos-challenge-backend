@@ -1,11 +1,10 @@
 import { Module } from "@nestjs/common";
-import { MarketdataController } from "./marketdata.controller";
-import { MarketdataService } from "./marketdata.service";
+import { MarketdataService } from "../Domain/marketdata.service";
 import { MarketdataAdapter } from "./marketdata.adapter";
 
 @Module({
   imports: [],
-  controllers: [MarketdataController],
+  controllers: [],
   providers: [MarketdataService, MarketdataAdapter],
 })
 export class MarketdataModule {}

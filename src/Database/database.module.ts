@@ -2,7 +2,10 @@ import { IDatabaseConfig } from "@Config";
 import { DynamicModule, Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "@User";
+import { Instrument } from "@Instrument/Domain/instrument.entity";
+import { Order } from "@Order/Domain/order.entity";
+import { User } from "@User/Domain/user.entity";
+import { Marketdata } from "@Marketdata/Domain/marketdata.entity";
 
 @Module({
   imports: [ConfigModule],
@@ -23,7 +26,7 @@ export class DatabaseModule {
               username: dbConfig.username,
               password: dbConfig.password,
               database: dbConfig.name,
-              entities: [User],
+              entities: [User, Order, Instrument, Marketdata],
             };
           },
           inject: [ConfigService],

@@ -9,10 +9,14 @@ import { AllExceptionsFilter } from "@Utils";
 import { validate } from "class-validator";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
+import { InstrumentModule } from "@Instrument";
+import { OrderModule } from "@Order";
 
 @Module({
   imports: [
     UserModule,
+    InstrumentModule,
+    OrderModule,
     MarketdataModule,
     ConfigModule.forRoot({
       load: [appConfig, databaseConfig],

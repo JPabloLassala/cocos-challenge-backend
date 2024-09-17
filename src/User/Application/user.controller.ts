@@ -1,6 +1,6 @@
 import { ClassSerializerInterceptor, Controller, Get, Param, UseInterceptors } from "@nestjs/common";
-import { UserService } from "./user.service";
-import { GetPortfolioRequestDTO } from "./user.dto";
+import { GetPortfolioRequestDTO } from "./user.request.dto";
+import { UserService } from "@User/Domain";
 
 @Controller("user")
 export class UserController {

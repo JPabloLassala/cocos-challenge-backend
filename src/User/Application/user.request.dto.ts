@@ -7,13 +7,6 @@ export class GetPortfolioRequestDTO {
   id: number;
 }
 
-export class UserDTO {
-  @Exclude()
-  id: number;
-  email: string;
-  accountNumber: string;
-}
-
 export class GetPortfolioResponseDTO {
   @Exclude()
   id: number;

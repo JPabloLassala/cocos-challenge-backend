@@ -1,6 +1,7 @@
 export enum Adapters {
   User = "UserAdapter",
-  // Portfolio = 'PortfolioRepository',
+  Instrument = "InstrumentAdapter",
+  Order = "OrderAdapter",
   // Stock = 'StockRepository',
   // StockHistory = 'StockHistoryRepository',
   // StockTransaction = 'StockTransactionRepository',
