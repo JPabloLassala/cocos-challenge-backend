@@ -1,23 +1,17 @@
-import { Inject, Injectable, Logger } from "@nestjs/common";
-import { IUserAdapter } from "./user.adapter.interface";
-import { Adapters } from "@Utils";
-import { IOrderAdapter } from "@Order";
-
-@Injectable()
-export class UserService {
-  constructor(
-    @Inject(Adapters.User) private readonly userAdapter: IUserAdapter,
-    @Inject(Adapters.Order) private readonly orderAdapter: IOrderAdapter,
-  ) {}
-
-  async getPortfolio(id: number) {
-    const user = await this.userAdapter.findUserById(id);
-
-    console.log(user);
-    const orders = await this.orderAdapter.findOrdersWithInstrumentsByUserId(id);
-
-    Logger.log(orders);
-
-    return user;
-  }
-}
+// select
+// 	u.id,
+// 	u.email,
+// 	u.accountnumber,
+// 	sum(case when o.side in ('SELL', 'CASH_OUT') then (o.size * o.price * -1) else o.price * o.size END) as total,
+// 	i.ticker,
+// 	i."name"
+// from
+// 	users u
+// left join orders o on
+// 	o.userid = u.id
+// left join instruments i on
+// 	i.id = o.instrumentid
+// where
+// 	u.id = 1
+// 	and o.status = 'FILLED'
+// group by u.id, i.id

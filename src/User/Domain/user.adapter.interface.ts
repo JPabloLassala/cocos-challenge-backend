@@ -1,3 +1,5 @@
+import { User } from "./user.entity";
+
 export interface IUserAdapter {
-  findUserById(id: number): Promise<any>;
+  getUserById(id: number): Promise<User>;
 }

@@ -1,5 +1,5 @@
 import { Instrument } from "./instrument.entity";
 
 export interface IInstrumentAdapter {
-  findInstrumentById(id: number): Promise<Instrument>;
+  getInstrumentByNameOrTicker(name?: string, ticker?: string): Promise<Instrument[]>;
 }

@@ -1,4 +1,6 @@
 export enum InstrumentTypes {
-  Stock = "ACCIONES",
+  Shares = "ACCIONES",
   Cash = "MONEDA",
 }
+
+export const PESOS = "PESOS";

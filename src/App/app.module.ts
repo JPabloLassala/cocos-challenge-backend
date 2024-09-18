@@ -11,13 +11,17 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { InstrumentModule } from "@Instrument";
 import { OrderModule } from "@Order";
+import { PortfolioModule } from "@Portfolio/Infrastructure";
+import { AssetModule } from "@Asset";
 
 @Module({
   imports: [
+    AssetModule,
     UserModule,
     InstrumentModule,
     OrderModule,
     MarketdataModule,
+    PortfolioModule,
     ConfigModule.forRoot({
       load: [appConfig, databaseConfig],
       isGlobal: true,
