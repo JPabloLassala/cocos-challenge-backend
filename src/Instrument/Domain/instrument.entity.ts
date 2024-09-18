@@ -1,5 +1,5 @@
-import { Marketdata } from "@Marketdata/Domain/marketdata.entity";
-import { Order } from "@Order/Domain/order.entity";
+import { Marketdata } from "@/Marketdata/Domain/marketdata.entity";
+import { Order } from "@/Order/Domain/order.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "instruments" })

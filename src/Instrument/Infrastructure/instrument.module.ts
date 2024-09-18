@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { Adapters } from "@Utils";
+import { Adapters } from "@/Utils";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Instrument } from "../Domain/instrument.entity";
 import { InstrumentAdapter } from "./instrument.adapter";

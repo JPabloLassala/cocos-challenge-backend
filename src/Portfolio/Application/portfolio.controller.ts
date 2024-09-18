@@ -8,7 +8,7 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { PortfolioRequestDTO } from "./portolio.request.dto";
-import { PortfolioService } from "@Portfolio/Domain";
+import { PortfolioService } from "@/Portfolio/Domain";
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller("portfolio")

@@ -1,4 +1,4 @@
-import { Instrument } from "@Instrument/Domain/instrument.entity";
+import { Instrument } from "@/Instrument/Domain/instrument.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "marketdata" })

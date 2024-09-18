@@ -1,24 +1,22 @@
-import { appConfig, databaseConfig } from "@Config";
-import { DatabaseModule } from "@Database";
-import { MarketdataModule } from "@Marketdata";
 import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
+import { ConfigModule } from "@nestjs/Config";
 import { APP_FILTER } from "@nestjs/core";
-import { UserModule } from "@User";
-import { AllExceptionsFilter } from "@Utils";
 import { validate } from "class-validator";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { InstrumentModule } from "@Instrument";
-import { OrderModule } from "@Order";
-import { PortfolioModule } from "@Portfolio/Infrastructure";
-import { AssetModule } from "@Asset";
+import { AssetModule } from "@/Asset";
+import { UserModule } from "@/User";
+import { OrderModule } from "@/Order";
+import { MarketdataModule } from "@/Marketdata";
+import { PortfolioModule } from "@/Portfolio";
+import { appConfig, databaseConfig } from "@/Config";
+import { DatabaseModule } from "@/Database";
+import { AllExceptionsFilter } from "@/Utils";
 
 @Module({
   imports: [
     AssetModule,
     UserModule,
-    InstrumentModule,
     OrderModule,
     MarketdataModule,
     PortfolioModule,

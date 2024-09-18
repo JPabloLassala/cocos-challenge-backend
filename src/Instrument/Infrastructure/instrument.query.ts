@@ -1,4 +1,4 @@
-import { Instrument } from "@Instrument/Domain/instrument.entity";
+import { Instrument } from "@/Instrument/Domain/instrument.entity";
 import { SelectQueryBuilder } from "typeorm";
 
 export class InstrumentQuery {

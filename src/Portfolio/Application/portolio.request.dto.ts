@@ -1,4 +1,4 @@
-import { UserResponseDTO } from "@User";
+import { UserResponseDTO } from "@/User";
 import { Transform, Type } from "class-transformer";
 
 class RemainingAssets extends Array<RemainingAssetDTO> {}

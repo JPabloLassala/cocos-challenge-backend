@@ -1,11 +1,11 @@
-import { IDatabaseConfig } from "@Config";
+import { IDatabaseConfig } from "@/Config";
 import { DynamicModule, Module } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ConfigModule, ConfigService } from "@nestjs/Config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Instrument } from "@Instrument/Domain/instrument.entity";
-import { Order } from "@Order/Domain/order.entity";
-import { User } from "@User/Domain/user.entity";
-import { Marketdata } from "@Marketdata/Domain/marketdata.entity";
+import { Instrument } from "@/Instrument/Domain/instrument.entity";
+import { Order } from "@/Order/Domain/order.entity";
+import { User } from "@/User/Domain/user.entity";
+import { Marketdata } from "@/Marketdata/Domain/marketdata.entity";
 
 @Module({
   imports: [ConfigModule],

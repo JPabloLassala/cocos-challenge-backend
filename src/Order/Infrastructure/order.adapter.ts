@@ -2,8 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Order } from "../Domain/order.entity";
 import { Repository } from "typeorm";
-import { IOrderAdapter, OrderStatuses } from "@Order/Domain";
-import { InstrumentTypes } from "@Instrument";
+import { IOrderAdapter, OrderStatuses } from "@/Order/Domain";
+import { InstrumentTypes } from "@/Instrument";
 
 @Injectable()
 export class OrderAdapter implements IOrderAdapter {

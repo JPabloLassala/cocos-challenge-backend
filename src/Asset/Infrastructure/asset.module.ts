@@ -1,6 +1,6 @@
-import { AssetController } from "@Asset/Application";
-import { AssetService } from "@Asset/Domain";
-import { InstrumentModule } from "@Instrument";
+import { AssetController } from "@/Asset/Application";
+import { AssetService } from "@/Asset/Domain";
+import { InstrumentModule } from "@/Instrument";
 import { Module } from "@nestjs/common";
 
 @Module({

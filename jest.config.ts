@@ -1,4 +1,8 @@
-export default {
+import type { Config } from "@jest/types";
+import { pathsToModuleNameMapper } from "ts-jest";
+import { compilerOptions } from "./tsconfig.json";
+
+const Config: Config.InitialOptions = {
   moduleFileExtensions: ["js", "json", "ts"],
   roots: ["<rootDir>/src", "<rootDir>/test"],
   transform: {
@@ -8,7 +12,9 @@ export default {
   collectCoverageFrom: ["**/*.(t|j)s"],
   coverageDirectory: "../coverage",
   testEnvironment: "node",
-  moduleNameMapper: {
-    "^@([^/]+)$": "<rootDir>/src/$1",
-  },
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths || {}, {
+    prefix: "<rootDir>/",
+  }),
 };
+
+export default Config;

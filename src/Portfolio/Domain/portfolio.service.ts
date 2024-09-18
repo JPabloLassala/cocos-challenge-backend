@@ -1,10 +1,10 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Portfolio, RemainingAsset, RemainingAssets } from "./portfolio.entity";
-import { UserAdapter } from "@User";
-import { OrderAdapter, OrderSides, OrderTypes } from "@Order";
-import { Order } from "@Order/Domain/order.entity";
-import { Adapters } from "@Utils";
-import { InstrumentTypes, PESOS } from "@Instrument";
+import { UserAdapter } from "@/User";
+import { OrderAdapter, OrderSides, OrderTypes } from "@/Order";
+import { Order } from "@/Order/Domain/order.entity";
+import { Adapters } from "@/Utils";
+import { InstrumentTypes, PESOS } from "@/Instrument";
 
 @Injectable()
 export class PortfolioService {

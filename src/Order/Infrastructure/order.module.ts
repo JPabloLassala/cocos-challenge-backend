@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { OrderService } from "@Order/Domain";
-import { Order } from "@Order/Domain/order.entity";
-import { Adapters } from "@Utils";
+import { OrderService } from "@/Order/Domain";
+import { Order } from "@/Order/Domain/order.entity";
+import { Adapters } from "@/Utils";
 import { OrderAdapter } from "./order.adapter";
 
 @Module({

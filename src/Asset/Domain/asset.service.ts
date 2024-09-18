@@ -1,6 +1,6 @@
-import { IInstrumentAdapter } from "@Instrument";
+import { IInstrumentAdapter } from "@/Instrument";
 import { Inject, Injectable } from "@nestjs/common";
-import { Adapters } from "@Utils";
+import { Adapters } from "@/Utils";
 
 @Injectable()
 export class AssetService {

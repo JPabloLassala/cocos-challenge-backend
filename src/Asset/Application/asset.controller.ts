@@ -1,4 +1,4 @@
-import { AssetService } from "@Asset/Domain";
+import { AssetService } from "@/Asset/Domain";
 import {
   ClassSerializerInterceptor,
   Controller,

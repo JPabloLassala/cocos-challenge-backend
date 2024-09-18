@@ -1,9 +1,9 @@
-import { AppModule } from "@App";
-import { IAppConfig } from "@Config";
+import { AppModule } from "@/App";
+import { IAppConfig } from "@/Config";
 import { Logger, ValidationPipe } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { ConfigService } from "@nestjs/Config";
 import { NestFactory } from "@nestjs/core";
-import { HttpExceptionFilter } from "@Utils";
+import { HttpExceptionFilter } from "@/Utils";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

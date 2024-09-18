@@ -1,4 +1,4 @@
-import { MarketdataDTO } from "@Marketdata/Infrastructure";
+import { MarketdataDTO } from "@/Marketdata/Infrastructure";
 import { Type } from "class-transformer";
 
 export class FindMarketDataResponseDTO {

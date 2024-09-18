@@ -1,4 +1,4 @@
-import { User } from "@User/Domain/user.entity";
+import { User } from "@/User/Domain/user.entity";
 import { Type } from "class-transformer";
 
 export class RemainingAssets extends Array<RemainingAsset> {}

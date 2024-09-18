@@ -1,4 +1,4 @@
-import { registerAs } from "@nestjs/config";
+import { registerAs } from "@nestjs/Config";
 import { DEFAULT_HOST, Environments } from "./config.constants";
 
 export interface IAppConfig {

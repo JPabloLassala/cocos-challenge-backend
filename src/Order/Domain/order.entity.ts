@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { OrderSides, OrderStatuses, OrderTypes } from "./order.constants";
-import { User } from "@User/Domain/user.entity";
-import { Instrument } from "@Instrument/Domain/instrument.entity";
+import { User } from "@/User/Domain/user.entity";
+import { Instrument } from "@/Instrument/Domain/instrument.entity";
 
 @Entity({ name: "orders" })
 export class Order {

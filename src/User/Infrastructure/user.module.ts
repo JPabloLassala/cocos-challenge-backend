@@ -1,5 +1,5 @@
-import { OrderModule } from "@Order";
-import { Adapters } from "@Utils";
+import { OrderModule } from "@/Order";
+import { Adapters } from "@/Utils";
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { User } from "../Domain/user.entity";
