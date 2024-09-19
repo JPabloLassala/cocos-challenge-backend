@@ -7,8 +7,9 @@ import {
   Param,
   UseInterceptors,
 } from "@nestjs/common";
-import { PortfolioRequestDTO } from "./portolio.request.dto";
+import { PortfolioDTO, PortfolioRequestDTO } from "./portfolio.request.dto";
 import { PortfolioService } from "@/Portfolio/Domain";
+import { plainToClass } from "class-transformer";
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller("portfolio")
@@ -17,7 +18,9 @@ export class PortfolioController {
 
   @Get(":id")
   @HttpCode(HttpStatus.OK)
-  async getPorfolio(@Param() dto: PortfolioRequestDTO) {
-    return await this.portfolioService.getPortfolio(dto.userid);
+  async getPorfolio(@Param() dto: PortfolioRequestDTO): Promise<PortfolioDTO> {
+    const porfolio = await this.portfolioService.getPortfolio(dto.userid);
+
+    return plainToClass(PortfolioDTO, porfolio);
   }
 }

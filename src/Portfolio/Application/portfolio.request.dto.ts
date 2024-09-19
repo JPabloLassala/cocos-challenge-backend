@@ -1,14 +1,19 @@
 import { UserResponseDTO } from "@/User";
-import { Transform, Type } from "class-transformer";
+import { Expose, Transform, Type } from "class-transformer";
 
 class RemainingAssets extends Array<RemainingAssetDTO> {}
 
+@Expose()
 class RemainingAssetDTO {
   name: string;
-
+  instrumentId: number;
   @Transform((value) => parseFloat(value.value))
-  total: string;
-  performance: number;
+  totalValue: string;
+  amount: number;
+
+  @Transform((value) => parseFloat(value.value).toFixed(2))
+  performancePercentage: number;
+  performanceValue: number;
 }
 
 export class PortfolioDTO {
