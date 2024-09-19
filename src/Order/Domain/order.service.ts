@@ -122,8 +122,8 @@ export class OrderService {
     return orders.reduce((sum, order) => {
       if (order.side === OrderSides.CashIn) sum += order.size;
       else if (order.side === OrderSides.CashOut) sum -= order.size;
-      else if (order.side === OrderSides.Buy) sum += order.size * order.price;
-      else sum -= order.size * order.price;
+      else if (order.side === OrderSides.Buy) sum -= order.size * order.price;
+      else sum += order.size * order.price;
 
       return sum;
     }, 0);
