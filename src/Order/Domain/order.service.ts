@@ -56,7 +56,7 @@ export class OrderService {
     let status: OrderStatuses;
 
     if (orderData.side === OrderSides.CashIn) {
-      orderData.status = orderData.type === OrderTypes.Market ? OrderStatuses.Filled : OrderStatuses.New;
+      status = orderData.type === OrderTypes.Market ? OrderStatuses.Filled : OrderStatuses.New;
     } else {
       const availableCash = this.calculateAvailableCash(previousOrders);
 
