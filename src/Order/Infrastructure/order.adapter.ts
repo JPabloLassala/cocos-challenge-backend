@@ -4,8 +4,6 @@ import { Order } from "../Domain/order.entity";
 import { Repository } from "typeorm";
 import { IOrderAdapter, OrderStatuses } from "@/Order/Domain";
 import { InstrumentTypes } from "@/Instrument";
-// import { Instrument } from "@/Instrument/Domain/instrument.entity";
-// import { User } from "@/User/Domain/user.entity";
 
 @Injectable()
 export class OrderAdapter implements IOrderAdapter {
@@ -25,10 +23,7 @@ export class OrderAdapter implements IOrderAdapter {
     });
   }
 
-  // async createOrder(newOrder: Partial<Order>, instrument: Instrument, user: User): Promise<Order> {
-  //   const order: Order = {
-  //     user: newOrder.user.id,
-  //   };
-  //   return this.orderRepository.save(newOrder);
-  // }
+  async createOrder(newOrder: Order): Promise<Order> {
+    return this.orderRepository.save(newOrder);
+  }
 }
