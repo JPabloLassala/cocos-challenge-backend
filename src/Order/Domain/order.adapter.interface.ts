@@ -4,5 +4,5 @@ import { Order } from "./order.entity";
 
 export interface IOrderAdapter {
   getFilledOrdersByUserId(id: number): Promise<Order[]>;
-  // createOrder(newOrder: Partial<Order>, instrument: Instrument, user: User): Promise<Order>;
+  createOrder(newOrder: Order): Promise<Order>;
 }

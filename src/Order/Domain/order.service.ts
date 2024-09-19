@@ -42,9 +42,9 @@ export class OrderService {
       assetOrder = await this.createAssetOrder(orderData, instrument, user, previousOrders, investment);
     }
 
-    return cashOrder || assetOrder;
+    await this.orderAdapter.createOrder(cashOrder || assetOrder);
 
-    // return this.orderAdapter.createOrder(newOrder, instrument, user);
+    return cashOrder || assetOrder;
   }
 
   private createCashOrder(
