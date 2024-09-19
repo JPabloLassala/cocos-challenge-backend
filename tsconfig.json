@@ -17,8 +17,10 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "resolveJsonModule": true,
+    "types": ["node", "jest"],
     "paths": {
-      "@*": ["src/*"]
+      "@/*": ["src/*"]
     }
   }
 }

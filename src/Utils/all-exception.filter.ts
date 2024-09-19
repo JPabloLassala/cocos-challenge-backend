@@ -1,6 +1,6 @@
-import { Environments, IAppConfig } from "@Config";
+import { Environments, IAppConfig } from "@/Config";
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { ConfigService } from "@nestjs/Config";
 import { HttpAdapterHost } from "@nestjs/core";
 
 @Catch()

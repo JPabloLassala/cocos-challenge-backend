@@ -1,4 +1,4 @@
-import { registerAs } from "@nestjs/config";
+import { registerAs } from "@nestjs/Config";
 import { DEFAULT_HOST, Environments } from "./config.constants";
 
 export interface IAppConfig {
@@ -25,7 +25,7 @@ export const appConfig = registerAs("app", () => ({
 export const databaseConfig = registerAs("database", () => ({
   host: process.env.DB_HOST || DEFAULT_HOST,
   port: parseInt(process.env.DB_PORT, 10) || 5432,
-  username: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "root",
-  name: process.env.DB_NAME || "test",
+  username: process.env.DB_USER || "postgres",
+  password: process.env.DB_PASSWORD || "postgres",
+  name: process.env.DB_NAME || "postgres",
 }));

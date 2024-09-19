@@ -12,7 +12,7 @@ services:
     expose:
       - 3000
     environment:
-      - PORT=1234
+      - PORT=3000
       - IGNORE_ENV_FILE=true
       - NODE_ENV=development
       - DB_HOST=cocos-challenge-db
