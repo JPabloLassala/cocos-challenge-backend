@@ -1,25 +1,28 @@
-import { Transform } from "class-transformer";
+import { IsEnum, IsNotEmpty, IsNumber, IsPositive, IsString, ValidateIf } from "class-validator";
+import { OrderSides, OrderTypes } from "../Domain";
 
-export class SendOrderRequestDTO {
-  instrumentId: number;
+export class CreateOrderDTO {
+  @IsNumber()
+  @IsPositive()
   userId: number;
-  size: number;
-  price: number;
-  type: string;
-  side: string;
-  status: string;
-  datetime: Date;
-}
 
-export class SendOrderResponseDTO {
-  id: number;
-  instrumentId: number;
-  userId: number;
-  size: number;
+  @IsString()
+  @IsNotEmpty()
+  assetTicker: string;
+
+  @IsNumber()
+  @IsPositive()
+  @ValidateIf((object) => object.type === OrderTypes.Market)
+  initialInvestment: number;
+
+  @IsNumber()
+  @IsPositive()
+  @ValidateIf((params) => params.type === OrderTypes.Limit)
   price: number;
-  type: string;
-  side: string;
-  status: string;
-  @Transform(({ value }) => value.toISOString())
-  datetime: string;
+
+  @IsEnum(OrderTypes)
+  type: OrderTypes;
+
+  @IsEnum(OrderSides)
+  side: OrderSides;
 }

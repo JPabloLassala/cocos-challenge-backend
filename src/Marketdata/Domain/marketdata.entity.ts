@@ -23,7 +23,7 @@ export class Marketdata {
   close: number;
 
   @Column({ type: "numeric", precision: 10, scale: 2 })
-  previousClose: number;
+  previousclose: number;
 
   @Column()
   date: Date;

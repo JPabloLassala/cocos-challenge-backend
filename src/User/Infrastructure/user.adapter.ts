@@ -9,6 +9,6 @@ export class UserAdapter implements IUserAdapter {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 
   async getUserById(id: number): Promise<User> {
-    return this.userRepository.findOne({ where: { id } });
+    return this.userRepository.findOneBy({ id });
   }
 }

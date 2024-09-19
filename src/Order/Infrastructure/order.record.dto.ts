@@ -8,3 +8,5 @@ export class OrderRecordDTO {
   status: string;
   datetime: Date;
 }
+
+export type CreateOrderRecordDTO = Omit<OrderRecordDTO, "id">;

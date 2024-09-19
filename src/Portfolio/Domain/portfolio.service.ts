@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Portfolio, RemainingAsset, RemainingAssets } from "./portfolio.entity";
-import { UserAdapter } from "@/User";
-import { OrderAdapter, OrderSides, OrderTypes } from "@/Order";
+import { IUserAdapter } from "@/User";
+import { IOrderAdapter, OrderSides } from "@/Order";
 import { Order } from "@/Order/Domain/order.entity";
 import { Adapters } from "@/Utils";
 import { InstrumentTypes, PESOS } from "@/Instrument";
@@ -9,13 +9,13 @@ import { InstrumentTypes, PESOS } from "@/Instrument";
 @Injectable()
 export class PortfolioService {
   constructor(
-    @Inject(Adapters.User) private readonly userAdapter: UserAdapter,
-    @Inject(Adapters.Order) private readonly orderAdapter: OrderAdapter,
+    @Inject(Adapters.User) private readonly userAdapter: IUserAdapter,
+    @Inject(Adapters.Order) private readonly orderAdapter: IOrderAdapter,
   ) {}
 
   async getPortfolio(userId: number): Promise<Portfolio> {
     const user = await this.userAdapter.getUserById(userId);
-    const orders = await this.orderAdapter.getOrdersWithInstrumentData(userId);
+    const orders = await this.orderAdapter.getFilledOrdersByUserId(userId);
     const performances = this.getPerformances(orders);
     const remainingAssets = this.calculateRemainingAssets(orders).map((asset) => {
       const performance = performances.find((p) => p.name === asset.name)?.performance || 0;

@@ -1,3 +1,5 @@
+import { Marketdata } from "./marketdata.entity";
+
 export interface IMarketdataAdapter {
-  findUserById(id: number): Promise<any>;
+  findMarketDataByInstrumentId(id: number): Promise<Marketdata>;
 }

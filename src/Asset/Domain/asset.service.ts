@@ -7,6 +7,6 @@ export class AssetService {
   constructor(@Inject(Adapters.Instrument) private readonly instrumentAdapter: IInstrumentAdapter) {}
 
   async getAssets(name?: string, type?: string) {
-    return await this.instrumentAdapter.getInstrumentByNameOrTicker(name, type);
+    return await this.instrumentAdapter.getInstrumentsByNameOrTicker(name, type);
   }
 }
