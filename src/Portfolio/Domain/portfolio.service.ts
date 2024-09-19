@@ -5,56 +5,75 @@ import { IOrderAdapter, OrderSides } from "@/Order";
 import { Order } from "@/Order/Domain/order.entity";
 import { Adapters } from "@/Utils";
 import { InstrumentTypes, PESOS } from "@/Instrument";
+import { IMarketdataAdapter } from "@/Marketdata";
+import { Marketdata } from "@/Marketdata/Domain/marketdata.entity";
 
 @Injectable()
 export class PortfolioService {
   constructor(
     @Inject(Adapters.User) private readonly userAdapter: IUserAdapter,
     @Inject(Adapters.Order) private readonly orderAdapter: IOrderAdapter,
+    @Inject(Adapters.Marketdata) private readonly marketDataAdapter: IMarketdataAdapter,
   ) {}
 
   async getPortfolio(userId: number): Promise<Portfolio> {
     const user = await this.userAdapter.getUserById(userId);
     const orders = await this.orderAdapter.getFilledOrdersByUserId(userId);
-    const performances = this.getPerformances(orders);
-    const remainingAssets = this.calculateRemainingAssets(orders).map((asset) => {
-      const performance = performances.find((p) => p.name === asset.name)?.performance || 0;
+    const instrumentIds = orders
+      .filter((order) => order.side !== OrderSides.CashIn && order.side !== OrderSides.CashOut)
+      .map((order) => order.instrument.id);
+    console.log("instrumentIds", instrumentIds);
+    const marketDataFromOrders = await this.marketDataAdapter.findMarketDataByInstrumentIds(instrumentIds);
 
-      return { ...asset, performance };
+    const remainingAssets = this.calculateRemainingAssets(orders).map((asset: RemainingAsset) => {
+      const performances = this.getPerformances(asset, orders, marketDataFromOrders);
+
+      return { ...performances };
     });
 
     return { user, remainingAssets };
   }
 
   private calculateRemainingAssets(orders: Order[]): RemainingAssets {
-    const shareOrders = orders.filter((order) => order.instrument.type === InstrumentTypes.Shares);
-    const remainingAssetsCash = shareOrders.reduce(
+    const remainingCash = orders.reduce<RemainingAsset>(
       (acc: RemainingAsset, order: Order): RemainingAsset => {
+        if (order.instrument.type !== InstrumentTypes.Cash) return acc;
+
         const value = this.getOrderValueInCash(order);
-        acc.total += value;
+        acc.totalValue += value;
+        acc.amount += order.size;
+        acc.instrumentId = order.instrument.id;
 
         return acc;
       },
-      { name: PESOS, total: 0, performance: 0 },
+      { name: PESOS, totalValue: 0, performancePercentage: 0, performanceValue: 0, amount: 0, instrumentId: 0 },
     );
 
-    const remainingAssets = shareOrders.reduce((acc: RemainingAssets, order: Order) => {
-      if (order.instrument.name === PESOS && order.instrument.type === InstrumentTypes.Cash) {
-        return acc;
-      }
+    const remainingAssets = orders.reduce<RemainingAssets>((acc, order: Order): RemainingAssets => {
+      if (order.instrument.type === InstrumentTypes.Cash) return acc;
 
       const existingOrder = acc.find((a) => a.name === order.instrument.name);
-
       if (existingOrder) {
-        existingOrder.total += this.getOrderValue(order);
+        existingOrder.totalValue += this.getOrderValue(order);
+        existingOrder.amount += this.getOrderSize(order);
 
         return acc;
       }
 
-      return [...acc, { name: order.instrument.name, total: this.getOrderValue(order), performance: 0 }];
+      return [
+        ...acc,
+        {
+          instrumentId: order.instrument.id,
+          name: order.instrument.name,
+          totalValue: this.getOrderValue(order),
+          amount: this.getOrderSize(order),
+          performancePercentage: 0,
+          performanceValue: 0,
+        },
+      ];
     }, []);
 
-    return [remainingAssetsCash, ...remainingAssets];
+    return [remainingCash, ...remainingAssets];
   }
 
   private getOrderValueInCash(order: Order) {
@@ -77,50 +96,21 @@ export class PortfolioService {
     }
   }
 
-  private getPerformances(orders: Order[]): Array<Partial<RemainingAsset>> {
-    return orders.reduce((acc: Array<Partial<RemainingAsset>>, order: Order) => {
-      if (!acc.find((a) => a.name === order.instrument.name)) {
-        const ordersFromSameInstrument = orders.filter((o) => o.instrument.name === order.instrument.name);
-        acc.push({ name: order.instrument.name, performance: this.getPerformance(ordersFromSameInstrument) });
-
-        return acc;
-      }
-
-      return acc;
-    }, []);
+  private getOrderSize(order: Order) {
+    if (order.side === OrderSides.Sell) {
+      return order.size * -1;
+    } else if (order.side === OrderSides.Buy) {
+      return order.size;
+    }
   }
 
-  private getPerformance(orders: Order[]): number {
-    const totalSpent = orders.reduce((acc: number, order) => {
-      if (order.side === OrderSides.Buy) {
-        acc += order.price * order.size;
-      }
+  private getPerformances(asset: RemainingAsset, orders: Order[], marketData: Marketdata[]): RemainingAsset {
+    console.log("marketData", marketData);
+    const marketDataEntry = marketData.find((m) => m.instrument.id === asset.instrumentId);
+    const currentValue = asset.amount * marketDataEntry.close;
+    const performanceValue = currentValue - asset.totalValue;
+    const percentage = (performanceValue / asset.totalValue) * 100;
 
-      return acc;
-    }, 0);
-    const averagePrice = totalSpent / orders.filter((o) => o.side === OrderSides.Buy).length;
-    const totalProfit = orders.reduce((acc: number, order) => {
-      if (order.side === OrderSides.Sell) {
-        const sellValuePerAsset = order.price / order.size;
-        const profitOrLoss = sellValuePerAsset - averagePrice;
-        const totalProfit = profitOrLoss * order.size;
-
-        acc += totalProfit;
-      }
-
-      return acc;
-    }, 0);
-    const remainingValue = orders.reduce((acc: number, order) => {
-      if (order.side === OrderSides.Buy) {
-        acc += order.size * averagePrice;
-      }
-      if (order.side === OrderSides.Sell) {
-        acc -= order.size * averagePrice;
-      }
-
-      return acc;
-    }, 0);
-
-    return (totalProfit + remainingValue - totalSpent) / totalSpent;
+    return { ...asset, performancePercentage: percentage, performanceValue };
   }
 }

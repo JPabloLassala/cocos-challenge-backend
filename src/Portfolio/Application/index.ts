@@ -1,2 +1,2 @@
 export * from "./portfolio.controller";
-export * from "./portolio.request.dto";
+export * from "./portfolio.request.dto";

@@ -4,9 +4,12 @@ import { Type } from "class-transformer";
 export class RemainingAssets extends Array<RemainingAsset> {}
 
 export class RemainingAsset {
+  instrumentId: number;
   name: string;
-  total: number;
-  performance: number;
+  amount: number;
+  totalValue: number;
+  performancePercentage: number;
+  performanceValue: number;
 }
 
 export class Portfolio {
