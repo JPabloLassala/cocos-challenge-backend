@@ -9,7 +9,7 @@ import { InstrumentTypes } from "@/Instrument";
 export class OrderAdapter implements IOrderAdapter {
   constructor(@InjectRepository(Order) private readonly orderRepository: Repository<Order>) {}
 
-  async getOrdersWithInstrumentData(userId: number): Promise<Order[]> {
+  async getFilledOrdersByUserId(userId: number): Promise<Order[]> {
     return this.orderRepository.find({
       where: { user: { id: userId }, status: OrderStatuses.Filled },
       relations: ["instrument"],
@@ -21,5 +21,9 @@ export class OrderAdapter implements IOrderAdapter {
       where: { user: { id: userId }, instrument: { type: InstrumentTypes.Shares } },
       relations: ["instrument"],
     });
+  }
+
+  async createOrder(newOrder: Order): Promise<Order> {
+    return this.orderRepository.save(newOrder);
   }
 }

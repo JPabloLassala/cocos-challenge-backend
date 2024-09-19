@@ -27,7 +27,6 @@ export class DatabaseModule {
               password: dbConfig.password,
               database: dbConfig.name,
               entities: [User, Order, Instrument, Marketdata],
-              logging: true,
             };
           },
           inject: [ConfigService],

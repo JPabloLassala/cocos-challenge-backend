@@ -5,9 +5,7 @@ import { validate } from "class-validator";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AssetModule } from "@/Asset";
-import { UserModule } from "@/User";
 import { OrderModule } from "@/Order";
-import { MarketdataModule } from "@/Marketdata";
 import { PortfolioModule } from "@/Portfolio";
 import { appConfig, databaseConfig } from "@/Config";
 import { DatabaseModule } from "@/Database";
@@ -16,9 +14,7 @@ import { AllExceptionsFilter } from "@/Utils";
 @Module({
   imports: [
     AssetModule,
-    UserModule,
     OrderModule,
-    MarketdataModule,
     PortfolioModule,
     ConfigModule.forRoot({
       load: [appConfig, databaseConfig],

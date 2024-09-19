@@ -5,10 +5,7 @@ export class FindAssetRequestDTO {
   @IsOptional()
   name?: string;
 
-  @ValidateIf((dto: FindAssetRequestDTO) => {
-    console.log(dto);
-    return !Boolean(dto.name);
-  })
+  @ValidateIf((dto: FindAssetRequestDTO) => !Boolean(dto.name))
   @IsString()
   @IsOptional()
   ticker?: string;

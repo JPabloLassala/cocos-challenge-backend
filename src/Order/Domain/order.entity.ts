@@ -6,7 +6,7 @@ import { Instrument } from "@/Instrument/Domain/instrument.entity";
 @Entity({ name: "orders" })
 export class Order {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @ManyToOne(() => Instrument, (instrument) => instrument.orders)
   @JoinColumn({ name: "instrumentid" })

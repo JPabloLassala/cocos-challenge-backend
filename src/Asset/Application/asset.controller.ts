@@ -19,7 +19,6 @@ export class AssetController {
   @HttpCode(HttpStatus.OK)
   async getAssets(@Query() query: FindAssetRequestDTO) {
     const { name, ticker } = query;
-    console.log(query);
 
     return this.assetService.getAssets(name, ticker);
   }
