@@ -24,11 +24,11 @@ export const mockInstrument: Instrument = {
 export const mockMarketData: Marketdata = {
   id: 1,
   instrument: mockInstrument as Instrument,
-  close: 100,
-  high: 100,
-  low: 90,
-  open: 95,
-  previousclose: 95,
+  close: "100",
+  high: "100",
+  low: "90",
+  open: "95",
+  previousclose: "95",
   date: new Date(),
 };
 

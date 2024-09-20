@@ -25,5 +25,5 @@ export class PortfolioDTO {
 }
 
 export class PortfolioRequestDTO {
-  userid: number;
+  id: number;
 }

@@ -16,6 +16,8 @@ export class Portfolio {
   @Type(() => User)
   user: User;
 
+  remainingCash: number;
+
   @Type(() => RemainingAsset)
   remainingAssets: RemainingAssets;
 }

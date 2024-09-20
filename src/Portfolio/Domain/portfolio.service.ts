@@ -4,7 +4,6 @@ import { IUserAdapter } from "@/User";
 import { IOrderAdapter, OrderSides } from "@/Order";
 import { Order } from "@/Order/Domain/order.entity";
 import { Adapters } from "@/Utils";
-import { InstrumentTypes, PESOS } from "@/Instrument";
 import { IMarketdataAdapter } from "@/Marketdata";
 import { Marketdata } from "@/Marketdata/Domain/marketdata.entity";
 
@@ -19,98 +18,90 @@ export class PortfolioService {
   async getPortfolio(userId: number): Promise<Portfolio> {
     const user = await this.userAdapter.getUserById(userId);
     const orders = await this.orderAdapter.getFilledOrdersByUserId(userId);
-    const instrumentIds = orders
-      .filter((order) => order.side !== OrderSides.CashIn && order.side !== OrderSides.CashOut)
-      .map((order) => order.instrument.id);
-    console.log("instrumentIds", instrumentIds);
-    const marketDataFromOrders = await this.marketDataAdapter.findMarketDataByInstrumentIds(instrumentIds);
+    const instrumentIds = Array.from(
+      orders.reduce((set, order) => set.add(order.instrument.id), new Set<number>()),
+    );
+    const marketData = await this.marketDataAdapter.findMarketDataByInstrumentIds(instrumentIds);
+    const remainingCash = this.calculateRemainingCash(orders);
+    const remainingAssets = this.calculateRemainingAssets(orders, marketData);
 
-    const remainingAssets = this.calculateRemainingAssets(orders).map((asset: RemainingAsset) => {
-      const performances = this.getPerformances(asset, orders, marketDataFromOrders);
-
-      return { ...performances };
-    });
-
-    return { user, remainingAssets };
+    return { user, remainingCash, remainingAssets };
   }
 
-  private calculateRemainingAssets(orders: Order[]): RemainingAssets {
-    const remainingCash = orders.reduce<RemainingAsset>(
-      (acc: RemainingAsset, order: Order): RemainingAsset => {
-        if (order.instrument.type !== InstrumentTypes.Cash) return acc;
+  calculateRemainingCash(orders: Order[]): number {
+    return orders.reduce<number>((cash, order: Order) => {
+      if (order.side === OrderSides.Sell) return cash + order.price * order.size;
+      else if (order.side === OrderSides.Buy) return cash - order.price * order.size;
+      else if (order.side === OrderSides.CashIn) return cash + order.size;
+      else if (order.side === OrderSides.CashOut) return cash - order.size;
 
-        const value = this.getOrderValueInCash(order);
-        acc.totalValue += value;
-        acc.amount += order.size;
-        acc.instrumentId = order.instrument.id;
+      return cash;
+    }, 0);
+  }
 
-        return acc;
-      },
-      { name: PESOS, totalValue: 0, performancePercentage: 0, performanceValue: 0, amount: 0, instrumentId: 0 },
-    );
+  private calculateRemainingAssets(orders: Order[], marketdata: Marketdata[]): RemainingAssets {
+    const result = orders.reduce<RemainingAsset[]>((acc, order: Order): RemainingAsset[] => {
+      const existingAsset = acc.find((a) => a.instrumentId === order.instrument.id);
+      const totalValue = this.getCurrentValueInCash(order, []);
+      const amount = this.getOrderSize(order);
 
-    const remainingAssets = orders.reduce<RemainingAssets>((acc, order: Order): RemainingAssets => {
-      if (order.instrument.type === InstrumentTypes.Cash) return acc;
-
-      const existingOrder = acc.find((a) => a.name === order.instrument.name);
-      if (existingOrder) {
-        existingOrder.totalValue += this.getOrderValue(order);
-        existingOrder.amount += this.getOrderSize(order);
-
-        return acc;
-      }
-
-      return [
-        ...acc,
-        {
+      if (!existingAsset) {
+        const newRemainingAsset = {
           instrumentId: order.instrument.id,
           name: order.instrument.name,
-          totalValue: this.getOrderValue(order),
-          amount: this.getOrderSize(order),
+          totalValue,
+          amount,
           performancePercentage: 0,
           performanceValue: 0,
-        },
-      ];
+        };
+
+        return [...acc, newRemainingAsset];
+      }
+
+      existingAsset.totalValue += this.getCurrentValueInCash(order, []);
+      existingAsset.amount += this.getOrderSize(order);
+
+      return acc;
     }, []);
 
-    return [remainingCash, ...remainingAssets];
+    result.forEach((asset) => {
+      const marketValue = orders
+        .filter((order) => order.instrument.id === asset.instrumentId)
+        .reduce<number>((val, order) => val + this.getCurrentValueInCash(order, marketdata), 0);
+      const performancePercentage = ((marketValue - asset.totalValue) / asset.totalValue) * 100;
+      const performanceValue = parseFloat((marketValue - asset.totalValue).toFixed(2));
+      asset.totalValue = marketValue;
+      asset.performancePercentage = performancePercentage;
+      asset.performanceValue = performanceValue;
+    });
+
+    return result;
   }
 
-  private getOrderValueInCash(order: Order) {
-    if (order.side === OrderSides.Sell) {
-      return order.price * order.size * -1;
-    } else if (order.side === OrderSides.CashOut) {
-      return order.size * -1;
-    } else if (order.side === OrderSides.Buy) {
-      return order.price * order.size;
-    } else {
-      return order.size;
+  private getCurrentValueInCash(order: Order, marketData: Marketdata[]): number {
+    if (marketData.length) {
+      const market = marketData.find((m) => m.instrument.id === order.instrument.id);
+      if (market) {
+        if (order.side === OrderSides.Sell) return parseFloat(market.close) * order.size * -1;
+        else if (order.side === OrderSides.Buy) return parseFloat(market.close) * order.size;
+        else return 0;
+      }
     }
+
+    if (order.side === OrderSides.CashIn) return order.size;
+    else if (order.side === OrderSides.CashOut) return order.size * -1;
+    else if (order.side === OrderSides.Buy) return order.price * order.size;
+    else if (order.side === OrderSides.Sell) return order.price * order.size * -1;
+    else return order.size;
   }
 
   private getOrderValue(order: Order) {
-    if (order.side === OrderSides.Sell) {
-      return order.size * -1;
-    } else if (order.side === OrderSides.Buy) {
-      return order.size;
-    }
+    if (order.side === OrderSides.Sell) return order.size * -1;
+    else if (order.side === OrderSides.Buy) return order.size;
   }
 
   private getOrderSize(order: Order) {
-    if (order.side === OrderSides.Sell) {
-      return order.size * -1;
-    } else if (order.side === OrderSides.Buy) {
-      return order.size;
-    }
-  }
-
-  private getPerformances(asset: RemainingAsset, orders: Order[], marketData: Marketdata[]): RemainingAsset {
-    console.log("marketData", marketData);
-    const marketDataEntry = marketData.find((m) => m.instrument.id === asset.instrumentId);
-    const currentValue = asset.amount * marketDataEntry.close;
-    const performanceValue = currentValue - asset.totalValue;
-    const percentage = (performanceValue / asset.totalValue) * 100;
-
-    return { ...asset, performancePercentage: percentage, performanceValue };
+    if (order.side === OrderSides.Sell || order.side === OrderSides.CashOut) return order.size * -1;
+    else if (order.side === OrderSides.Buy || order.side === OrderSides.CashIn) return order.size;
   }
 }
