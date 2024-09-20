@@ -1,73 +1,82 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
+# Cocos Challenge Backend
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Este proyecto es una resolucion del Backend Challenge de CocosCapital.
 
-## Installation
+En este proyecto, implementé las tecnologías que suelo manejar más seguido.
 
+## Aspectos técnicos
+El proyecto implementa NestJS con el agregado de muchos componentes y clases para asegurar la resistencia a fallos, monitoreo, serialización y validación. El código apunta a ser de fácil comprensión para cualquier desarrollador adicional que quiera involucrarse en el proyecto.
+
+En cuanto a tecnologías utilizadas están `NodeJS`, `NestJS`, `Jest`, `TypeORM`, `PostgreSQL`, `Eslint` y `Prettier`.
+
+## Aspectos funcionales
+Se creó un directorio diferente por cada *unidad de dominio*, que engloba tanto entidades de datos, como `User` o `Instrument`, tanto como entidades de negocio, que si bien no tienen representación directa en la base de datos, representan un elemento de la aplicación, como `Portfolio`.
+
+Cada directorio separa en 3 el ciclo de vida de cada petición:
+- `Application` para lo relacionado a la request HTTP, serialización y validación de parámetros
+- `Domain` para la definición de la entidad de dominio, y lógica abstracta de negocio
+- `Infrastructure` para la implementación técnica. En este caso, para la persistencia en la base de datos
+
+## Dinámica de proyecto
+
+El proyecto utiliza *Git flow*. Esto significa, las ramas son separadas en 3 tipos:
+- `main` donde están los cambios que se consideran aptos para **producción**
+- `develop` donde están los últimos cambios en desarrollo
+- `CCC-##-<descripcion>` estas son diferentes ramas, donde cada una describe un cambio singular en el código y la funcionalidad. Por ejemplo, `CCC-11-migrations` es la rama donde se implementaron las migraciones
+
+## Requerimientos
+- **Portfolio:** La respuesta deberá devolver el valor total de la cuenta de un usuario, sus pesos disponibles para operar y el listado de activos que posee (incluyendo cantidad de acciones, el valor total monetario de la posición ($) y el rendimiento total (%)).
+
+Endpoint: [GET]  `http://localhost:3000/portfolio/:userId`
+
+- **Buscar activos:** La respuesta deberá devolver el listado de activos similares a la busqueda realizada (tiene que soportar busqueda por ticker y/o por nombre).
+
+Endpoint (ticker): [GET] `http://localhost:3000/asset?ticker=:ticker`
+
+Endpoint (nombre): [GET]  `http://localhost:3000/asset?name=:name`
+
+> **_NOTA:_**  Se pueden combinar los parámetros. Por ej, `http://localhost:3000/asset?ticker=:ticker&name=:name`
+
+- **Enviar una orden al mercado:** A traves de este endpoint se podrá enviar una orden de compra o venta del activo. Soportando dos tipos de ordenes: MARKET y LIMIT. Las ordenes MARKET no requieren que se envíe el precio ya que se ejecutara la orden con las ofertas del mercado, por el contrario, las ordenes limite requieren el envío del precio al cual el usuario quiere ejecutar la orden. La orden quedará grabada en la tabla orders con el estado y valores correspondientes.
+
+Endpoint: [POST] `http://localhost:3000/order`
+
+> **_NOTA:_**  En el archivo de Postman hay un ejemplo para el request body
+
+
+## Instalación
+
+- Instalar las dependencias del proyecto:
 ```bash
-$ yarn install
+$ yarn
 ```
 
-## Running the app
-
+- Generar el .env
 ```bash
-# development
-$ yarn run start
+$ cp .env.example .env
+```
 
-# watch mode
-$ yarn run start:dev
+- Levantar los container
+```bash
+$ docker-compose up -d
+```
 
-# production mode
-$ yarn run start:prod
+- Correr las migraciones
+```bash
+$ yarn migrations:run
 ```
 
 ## Test
 
+Se crearon test de integration para la funcionalidad de enviar orden.
+
+Para esto, se mockearon los elementos de las tablas `users`, `instruments`, `marketdata` y `order` y se corrió la lógica de negocio directo desde el servicio, estando tanto este como el Adapter sin modificar. 
+
 ```bash
-# unit tests
+# test unitarios 
 $ yarn run test
 
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
+# coverage
 $ yarn run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
