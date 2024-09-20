@@ -19,7 +19,7 @@ export class PortfolioController {
   @Get(":id")
   @HttpCode(HttpStatus.OK)
   async getPorfolio(@Param() dto: PortfolioRequestDTO): Promise<PortfolioDTO> {
-    const porfolio = await this.portfolioService.getPortfolio(dto.userid);
+    const porfolio = await this.portfolioService.getPortfolio(dto.id);
 
     return plainToClass(PortfolioDTO, porfolio);
   }

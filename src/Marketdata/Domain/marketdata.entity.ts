@@ -11,20 +11,20 @@ export class Marketdata {
   instrument: Instrument;
 
   @Column({ type: "numeric", precision: 10, scale: 2 })
-  high: number;
+  high: string;
 
   @Column({ type: "numeric", precision: 10, scale: 2 })
-  low: number;
+  low: string;
 
   @Column({ type: "numeric", precision: 10, scale: 2 })
-  open: number;
+  open: string;
 
   @Column({ type: "numeric", precision: 10, scale: 2 })
-  close: number;
+  close: string;
 
   @Column({ type: "numeric", precision: 10, scale: 2 })
-  previousclose: number;
+  previousclose: string;
 
-  @Column()
+  @Column({ type: "date" })
   date: Date;
 }

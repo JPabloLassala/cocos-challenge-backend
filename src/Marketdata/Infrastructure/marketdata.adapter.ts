@@ -13,6 +13,10 @@ export class MarketdataAdapter implements IMarketdataAdapter {
   }
 
   async findMarketDataByInstrumentIds(ids: number[]): Promise<Marketdata[]> {
-    return this.repository.find({ where: { instrument: { id: In(ids) } }, relations: ["instrument"] });
+    return this.repository.find({
+      where: { instrument: { id: In(ids) } },
+      relations: ["instrument"],
+      order: { date: "DESC" },
+    });
   }
 }

@@ -39,7 +39,13 @@ export class OrderService {
     if (orderData.side === OrderSides.CashIn || orderData.side === OrderSides.CashOut) {
       cashOrder = this.createCashOrder(orderData, instrument, user, previousOrders);
     } else {
-      assetOrder = await this.createAssetOrder(orderData, instrument, user, previousOrders, investment);
+      assetOrder = await this.createAssetOrder(
+        orderData,
+        instrument,
+        user,
+        previousOrders,
+        investment,
+      );
     }
 
     await this.orderAdapter.createOrder(cashOrder || assetOrder);
@@ -89,7 +95,8 @@ export class OrderService {
     let status: OrderStatuses;
     let isOperationPossible: boolean;
     const marketData = await this.marketdataAdapter.findMarketDataByInstrumentId(instrument.id);
-    const price = orderData.type === OrderTypes.Market ? marketData.close : orderData.price;
+    const price =
+      orderData.type === OrderTypes.Market ? parseFloat(marketData.close) : orderData.price;
     const size = () => (investment ? Math.floor(investment / price) : orderData.size);
 
     if (orderData.side === OrderSides.Buy) {
