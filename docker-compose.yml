@@ -1,0 +1,45 @@
+services:
+  # Node.js service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: cocos-challenge
+    restart: always
+    ports:
+      - "3000:3000"
+    expose:
+      - 3000
+    environment:
+      - PORT=3000
+      - IGNORE_ENV_FILE=true
+      - NODE_ENV=development
+      - DB_HOST=cocos-challenge-db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=postgres
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+
+  # PostgreSQL service
+  db:
+    image: postgres:16-alpine
+    platform: ${BUILD_PLATFORM:-}
+    container_name: cocos-challenge-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cocos
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+# Volumes for persistent data
+volumes:
+  postgres_data:
