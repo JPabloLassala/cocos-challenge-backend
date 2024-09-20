@@ -1,0 +1,87 @@
+{
+	"info": {
+		"_postman_id": "ba8dfe85-bd64-4f5d-9752-9a5fab90c940",
+		"name": "Cocos Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "7276315"
+	},
+	"item": [
+		{
+			"name": "Get User Portfolio",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:3000/portfolio/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Find Asset by Ticker",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/asset?ticker=DY",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"asset"
+					],
+					"query": [
+						{
+							"key": "ticker",
+							"value": "DY"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Asset by Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/asset?name=Dyca",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"asset"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Dyca"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send Order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": 1,\n    \"assetTicker\": \"DOME\",\n    \"price\": 500,\n    \"initialInvestment\": 300000,\n    \"type\": \"MARKET\",\n    \"side\": \"BUY\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/order"
+			},
+			"response": []
+		}
+	]
+}
