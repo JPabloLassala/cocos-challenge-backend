@@ -2,8 +2,6 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/Config";
 import { APP_FILTER } from "@nestjs/core";
 import { validate } from "class-validator";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
 import { AssetModule } from "@/Asset";
 import { OrderModule } from "@/Order";
 import { PortfolioModule } from "@/Portfolio";
@@ -24,9 +22,7 @@ import { AllExceptionsFilter } from "@/Utils";
     }),
     DatabaseModule.forRoot(),
   ],
-  controllers: [AppController],
   providers: [
-    AppService,
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
