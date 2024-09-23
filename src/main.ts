@@ -1,9 +1,8 @@
 import { AppModule } from "@/App";
-import { IAppConfig } from "@/Config";
+import { errorMorgan, IAppConfig, successMorgan } from "@/Config";
 import { Logger, ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/Config";
 import { NestFactory } from "@nestjs/core";
-import { errorMorgan, successMorgan } from "./Config/morgan";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
